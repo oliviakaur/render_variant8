@@ -1,0 +1,58 @@
+# =============================================================================
+# render.yaml — Render.com Blueprint for Vanilla Static HTML CSR + XML Sitemap
+#
+# Includes:
+#   1. Static Site configuration (free CDN hosting of ./public with /sitemap.xml
+#      and /atom.xml proxy rewrites to https://bunbunserver.my.id)
+#   2. Optional Node Web Service configuration (uncomment if you want dynamic
+#      host-scoped /sitemap.xml via server.js)
+# =============================================================================
+
+services:
+  # --- Option 1: Render Static Site (Vanilla Static HTML CSR) ---
+  - type: web
+    name: csr-vanilla-static-render
+    runtime: static
+    buildCommand: ""
+    staticPublishPath: ./public
+    headers:
+      - path: /sitemap.xml
+        name: Content-Type
+        value: application/xml; charset=UTF-8
+      - path: /sitemap.xml
+        name: Cache-Control
+        value: no-store, must-revalidate
+      - path: /atom.xml
+        name: Content-Type
+        value: application/atom+xml; charset=UTF-8
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+    routes:
+      - type: rewrite
+        source: /sitemap.xml
+        destination: https://bunbunserver.my.id/sitemap.xml?domain=all&db=all
+      - type: rewrite
+        source: /api/sitemap.xml
+        destination: https://bunbunserver.my.id/sitemap.xml?domain=all&db=all
+      - type: rewrite
+        source: /atom.xml
+        destination: https://bunbunserver.my.id/atom.xml?domain=all&db=all
+      - type: rewrite
+        source: /feed.xml
+        destination: https://bunbunserver.my.id/atom.xml?domain=all&db=all
+
+  # --- Option 2: Render Node Web Service (Dynamic Domain-Scoped Sitemap via server.js) ---
+  # Uncomment below if deploying as a Node Web Service instead of a Static Site:
+  # - type: web
+  #   name: csr-vanilla-node-render
+  #   runtime: node
+  #   plan: free
+  #   buildCommand: "echo 'Zero dependencies to install'"
+  #   startCommand: "node server.js"
+  #   healthCheckPath: /healthz
+  #   envVars:
+  #     - key: NODE_ENV
+  #       value: production
+  #     - key: PORT
+  #       value: 10000

@@ -1,0 +1,14 @@
+{
+  "name": "csr-vanilla-render-deployment-bundle",
+  "version": "1.1.0",
+  "private": true,
+  "description": "CSR vanilla static HTML Render.com deployment bundle (public/index.html, index.html, render.yaml, server.js, package.json)",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
